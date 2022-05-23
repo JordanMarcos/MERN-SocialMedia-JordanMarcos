@@ -4,6 +4,9 @@ const express = require('express');
 // Je donne le chemin à dotenv pour accéder aux variables d'environements
 require('dotenv').config({path: './config/.env'})
 
+// Je prends db.js pour accéder à la BDD
+require('./config/db');
+
 // 'App' devient express() 
 const app = express();
 
