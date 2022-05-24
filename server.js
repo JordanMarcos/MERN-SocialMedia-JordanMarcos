@@ -16,13 +16,12 @@ require('./config/db');
 // 'App' devient express() 
 const app = express();
 
-// J'utiliser bodyParser pour pouvoir traiter les requetes
+// J'utiliser bodyParser pour pouvoir traiter les requetes (req)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Routes
 app.use('/api/user', userRoutes);
-
 
 // Server : je demande à Express d'écouter sur le port déclaré dans les var d'environements
 app.listen(process.env.PORT, () => {

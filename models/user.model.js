@@ -1,6 +1,13 @@
+// Je prends mongoose
 const mongoose = require('mongoose');
+
+// Je prends le validateur d'email isEmail de la bibliothèque validator
 const { isEmail } = require('validator');
 
+// Je prends la bibliothèque bcrypt
+const bcrypt = require('bcrypt')
+
+// Ce model correspond à ce que doit ressembler la BDD des users
 const userSchema = new mongoose.Schema (
 
     {
@@ -25,6 +32,10 @@ const userSchema = new mongoose.Schema (
             max: 1024,
             minlength: 6
         },
+        picture : {
+            type: String,
+            default: "./uploads/profil/random-user.png"
+        },
         bio: {
             type: String,
             max: 1024
@@ -43,6 +54,13 @@ const userSchema = new mongoose.Schema (
         timestamps: true
     }
 )
+
+// La fonction qui permet de saler (crypter) le mdp avant de le save dans la BDD
+userSchema.pre("save", async function(next) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+})
 
 const UserModel = mongoose.model('user', userSchema);
 
