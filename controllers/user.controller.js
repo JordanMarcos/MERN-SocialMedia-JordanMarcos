@@ -96,13 +96,32 @@ module.exports.follow = async (req,res) => {
 
 // Fonction permettant de mettre à jour les unfollows d'un user
 module.exports.unfollow = async (req,res) => {
-    if (!ObjectID.isValid(req.params.id))
+    if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.idToUnfollow))
     return res.status (400).send('ID inconnu : ' + req.params.id)
 
     try{
-
-    } 
-    catch (err) {
-        return res.status(500).json({ message : err });
+     // Add to the follower list
+     await UserModel.findByIdAndUpdate(
+        req.params.id,
+        {$pull: {following: req.body.idToUnfollow}},
+        { new: true, upsert: true },
+            (err, docs) => {
+                if (!err) res.status(201).json(docs);
+                else return res.status(400).json(err);
+            }
+    // j'utilise le .then car dans la version mongo que j'utilise il est obligé d'utilisé .then si deux instructions
+    ).then( 
+        // Add to following list 
+        await UserModel.findByIdAndUpdate(
+            req.body.idToUnfollow,
+            {$pull: {followers: req.params.id}},
+            { new: true, upsert: true },
+            (err, docs) => {
+                if (err) return res.status(400).json(err);
+            }
+        ));
+   
+    } catch (err) {
+        console.error('Erreur du try catch userController Unfollow : ' + err);
     }
 }
