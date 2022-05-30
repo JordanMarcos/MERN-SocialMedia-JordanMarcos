@@ -22,4 +22,8 @@ router.put('/:id', userController.updateUser);
 // Permet de supprimer un User
 router.delete('/:id', userController.deleteUser);
 
+// Permet de mettre à jour les données du tableau à l'intérieur d'un user (follow/unfollow)
+router.patch('/follow/:id', userController.follow)
+router.patch('/unfollow/:id', userController.unfollow)
+
 module.exports = router;
