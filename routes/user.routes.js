@@ -9,8 +9,7 @@ const userController = require('../controllers/user.controller');
 router.post("/register", authController.signUp);
 
 
-// User DB
-
+// User DB CRUD
 // Récupère tous les users
 router.get('/', userController.getAllUsers);
 
@@ -20,5 +19,7 @@ router.get('/:id', userController.userInfo);
 // Permet de mettre à jour les données de l'user
 router.put('/:id', userController.updateUser);
 
+// Permet de supprimer un User
+router.delete('/:id', userController.deleteUser);
 
 module.exports = router;
