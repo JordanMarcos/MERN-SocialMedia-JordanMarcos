@@ -8,9 +8,17 @@ const userController = require('../controllers/user.controller');
 // Authentification
 router.post("/register", authController.signUp);
 
+
 // User DB
+
+// Récupère tous les users
 router.get('/', userController.getAllUsers);
+
+// Récupère les infos d'un seul user
 router.get('/:id', userController.userInfo);
+
+// Permet de mettre à jour les données de l'user
 router.put('/:id', userController.updateUser);
+
 
 module.exports = router;
