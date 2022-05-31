@@ -43,8 +43,11 @@ module.exports.signIn = async (req, res) => {
     } catch (err) {
         res.status(200).json(err);
     }
-}
+};
 
+// Je créer et export le controller logout
 module.exports.logout = (req,res) => {
+    res.cookie('jwt', '', {maxAge: 1});
+    res.redirect('/');
+};
 
-}
