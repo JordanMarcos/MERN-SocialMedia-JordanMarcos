@@ -91,6 +91,7 @@ module.exports.likePost = async (req, res) => {
             // lorsque je fais deux fois le même objet de requete il crash, donc important d'utililser .clone()
             // https://stackoverflow.com/questions/68945315/mongooseerror-query-was-already-executed
         ).clone().catch(function(err){console.log(err);});
+
         await UserModel.findByIdAndUpdate(
             req.body.id,
             {
@@ -115,4 +116,44 @@ module.exports.unlikePost = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('ID inconnu : ' + req.params.id);
 
+    try {
+        await PostModel.findByIdAndUpdate(
+            req.params.id, {
+                $pull: {
+                    likers: req.body.id
+                }
+            }, {
+                new: true
+            },
+            (err, docs) => {
+                if (err) return res.status(400).send(err);
+            }
+            // j'utilise .clone() à la fin car la version de mongoDB que j'ai ne peut pas fonctioner sans celle-ci,
+            // lorsque je fais deux fois le même objet de requete il crash, donc important d'utililser .clone()
+            // https://stackoverflow.com/questions/68945315/mongooseerror-query-was-already-executed
+        ).clone().catch(function (err) {
+            console.log(err);
+        });
+
+        await UserModel.findByIdAndUpdate(
+            req.body.id, {
+                $pull: {
+                    likes: req.params.id
+                }
+            }, {
+                new: true
+            },
+            (err, docs) => {
+                if (!err) res.send(docs)
+                else return res.status(400).send(err);
+            }
+            // j'utilise .clone() à la fin car la version de mongoDB que j'ai ne peut pas fonctioner sans celle-ci,
+            // lorsque je fais deux fois le même objet de requete il crash, donc important d'utililser .clone()
+            // https://stackoverflow.com/questions/68945315/mongooseerror-query-was-already-executed
+        ).clone().catch(function (err) {
+            console.log(err);
+        })
+    } catch (err) {
+        return res.status(400).send(err);
+    }
 };
