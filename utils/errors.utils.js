@@ -30,12 +30,14 @@ module.exports.signInErrors = (err) => {
         email: '',
         password: ''
     };
-    
-    if (err.message.includes('email'))
-        errors.email = "Email inconnu";
+    // j'ai fait cette alternantive au includes car plus sécurisé : on ne dit pas clairement ce qu'il ne va pas
+    // et en plus la manière dont la personne fait sur la vidéo ne marche pas pour moi car (err) contient le throw
+    // error de user.model qui dit 'mdp incorrect' donc impossible de matcher avec des includes email ou password
+    if (err.message.includes('Mot de passe incorrecte'))
+        errors.email = "La combinaison email et mot de passe ne correspondent pas";
 
-    if (err.message.includes('password'))
-        errors.password = "Le mot de passe ne correspond pas";
+    if (err.message.includes('Mot de passe incorrecte'))
+        errors.password = "La combinaison email et mot de passe ne correspondent pas";
 
     return errors;
 };
