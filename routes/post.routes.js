@@ -19,6 +19,11 @@ router.put('/:id', postController.updatePost);
 // Delete 
 router.delete('/:id', postController.deletePost);
 
+// Like 
+router.patch('/like-post/:id', postController.likePost);
+
+// Unlike
+router.patch('/unlike-post/:id', postController.unlikePost);
 
 // J'exporte mon routeur
 module.exports = router;
