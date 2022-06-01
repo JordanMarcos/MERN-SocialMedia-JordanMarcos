@@ -25,5 +25,16 @@ router.patch('/like-post/:id', postController.likePost);
 // Unlike
 router.patch('/unlike-post/:id', postController.unlikePost);
 
+
+// Comments routes (Table comments dans la table Post thanks NOSQL)
+// Create
+router.patch('/comment-post/:id', postController.commentPost); 
+
+// Update
+router.patch('/edit-comment-post/:id', postController.editCommentPost);
+
+// Delete
+router.patch('/delete-comment-post/:id', postController.deleteCommentPost);
+
 // J'exporte mon routeur
 module.exports = router;

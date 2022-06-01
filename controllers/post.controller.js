@@ -14,7 +14,7 @@ module.exports.readPost = (req, res) => {
     PostModel.find((err, docs) => {
         if (!err) res.send(docs);
         else console.log('Erreur lors de la récupération de la data : ' + err);
-    })
+    }).sort({ createdAt: -1 });
 };
 
 // CREATE 
@@ -156,4 +156,43 @@ module.exports.unlikePost = async (req, res) => {
     } catch (err) {
         return res.status(400).send(err);
     }
+};
+
+// Create post controller
+module.exports.commentPost = (req, res) => {
+    if (!ObjectID.isValid(req.params.id))
+        return res.status(400).send('ID inconnu : ' + req.params.id);
+
+    try {
+        return PostModel.findByIdAndUpdate(
+            req.params.id,
+            {
+                $push: {
+                    comment: {
+                        commenterId: req.body.commenterId,
+                        commenterPseudo: req.body.commenterPseudo,
+                        text: req.body.text,
+                        timestamp: new Date().getTime()
+                    },
+                },
+            }, 
+            { new:true },
+            (err, docs) => {
+                if (!err) return res.send(docs);
+                else return res.status(400).send(err);
+            },
+        );
+    } catch (err) {
+        return res.status(400).send(err);
+    }
+};
+
+// Update post controller
+module.exports.editCommentPost = (req, res) => {
+
+};
+
+// Delete post controller
+module.exports.deleteCommentPost = (req, res) => {
+
 };
