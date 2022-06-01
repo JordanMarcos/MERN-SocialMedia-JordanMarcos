@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 
 // Je prends les routes
 const userRoutes = require('./routes/user.routes');
+const postRoutes = require('./routes/post.routes');
 
 // Je donne le chemin à dotenv pour accéder aux variables d'environements
 require('dotenv').config({path: './config/.env'});
@@ -41,6 +42,7 @@ app.get('/jwtid', requireAuth, (req, res) => {
 
 // Routes
 app.use('/api/user', userRoutes);
+app.use('/api/post',postRoutes);
 
 // Server : je demande à Express d'écouter sur le port déclaré dans les var d'environements
 app.listen(process.env.PORT, () => {
