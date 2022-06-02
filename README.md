@@ -2,6 +2,6 @@
 
 ## Stack :
 
-**BACK-END : JS, NodeJS, Express, MongoDB**
+**BACK-END : NodeJS, Express, MongoDB**
 
 **FRONT-END : JS, React, Redux**
