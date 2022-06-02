@@ -158,7 +158,7 @@ module.exports.unlikePost = async (req, res) => {
     }
 };
 
-// Create post controller
+// Create post comment controller
 module.exports.commentPost = (req, res) => {
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('ID inconnu : ' + req.params.id);
@@ -189,10 +189,53 @@ module.exports.commentPost = (req, res) => {
 
 // Update post controller
 module.exports.editCommentPost = (req, res) => {
+    if (!ObjectID.isValid(req.params.id))
+        return res.status(400).send('ID inconnu : ' + req.params.id);
 
+    try {
+        return PostModel.findById(
+            req.params.id,
+            (err, docs) => {
+                const theComment = docs.comment.find((comment) =>
+                    comment._id.equals(req.body.commentId)
+                );
+
+                if (!theComment) return res.status(404).send('Commentaire non trouvé');
+                theComment.text = req.body.text;
+
+                return docs.save((err) => {
+                    if (!err) return res.status(200).send(docs);
+                    return res.status(500).send(err);
+                });
+            }
+        );
+    } catch (err) {
+        return res.status(400).send(err);
+    };
 };
 
 // Delete post controller
 module.exports.deleteCommentPost = (req, res) => {
+    if (!ObjectID.isValid(req.params.id))
+        return res.status(400).send("ID inconnu : " + req.params.id);
 
+    try {
+        return PostModel.findByIdAndUpdate(
+            req.params.id, {
+                $pull: {
+                    comment: {
+                        _id: req.body.commentId,
+                    },
+                },
+            }, {
+                new: true
+            },
+            (err, docs) => {
+                if (!err) return res.send(docs);
+                else return res.status(400).send(err);
+            }
+        );
+    } catch (err) {
+        return res.status(400).send(err);
+    }
 };
