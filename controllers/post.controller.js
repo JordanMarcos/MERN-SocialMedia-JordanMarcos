@@ -7,6 +7,16 @@ const UserModel = require('../models/user.model');
 // Je prends ObjectID pour vérifier l'existence du param en BDD
 const ObjectID = require('mongoose').Types.ObjectId;
 
+// Je prends uploadErrors
+const { uploadErrors } = require("../utils/errors.utils");
+
+// Biblio natif à nodeJS pour incrémenter des élèments dans des fichiers
+const fs = require('fs');
+
+// Je récup la biblio natif promisify
+const { promisify } = require('util');
+const pipeline = promisify(require('stream').pipeline);
+
 
 // CRUD controllers
 // READ 
@@ -19,9 +29,42 @@ module.exports.readPost = (req, res) => {
 
 // CREATE 
 module.exports.createPost = async (req, res) => {
+    
+    let fileName;
+
+    if (req.file !== null){
+      // Ce try catch vérifie la taille de l'image
+      try {
+        if (
+          req.file.detectedMimeType !== "image/jpg" &&
+          req.file.detectedMimeType !== "image/png" &&
+          req.file.detectedMimeType !== "image/jpeg"
+        )
+          throw Error("Fichier invalide");
+
+        if (req.file.size > 500000) throw Error("Taille maximale");
+      } catch (err) {
+        const errors = uploadErrors(err);
+        return res.status(201).json({ errors });
+      }
+
+      // Pour que chaque photo soit unique et au format jpg
+      fileName = req.body.posterId + Date.now() + ".jpg";
+
+      // Créer un fichier avec un chemin avec la biblio fs
+      await pipeline(
+        req.file.stream,
+        // pour que ça marche multer j'ai du downgrade nodeJS à la V 15.4.0
+        fs.createWriteStream(
+          `${__dirname}/../client/public/uploads/posts/${fileName}`
+        )
+      );
+    }
+
     const newPost = new PostModel({
         posterId: req.body.posterId,
         message: req.body.message,
+        picture: req.file !== null ? "./uploads/posts/" + fileName : "",
         video: req.body.video,
         likers: [],
         comments: []

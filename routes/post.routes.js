@@ -3,12 +3,16 @@ const router = require('express').Router();
 // Je récupère le controller des posts
 const postController = require('../controllers/post.controller');
 
+// Je récupère la biblio multer afin d'utiliser son middleware pour l'upload de fichiers
+const multer = require('multer');
+const upload = multer();
+
 
 // CRUD des posts 
 // Read
 router.get('/', postController.readPost);
 // Create
-router.post('/', postController.createPost);
+router.post('/', upload.single("file") ,postController.createPost);
 // Update 
 router.put('/:id', postController.updatePost);
 // Delete 
