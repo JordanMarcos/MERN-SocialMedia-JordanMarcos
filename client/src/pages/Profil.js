@@ -9,7 +9,9 @@ const Profil = () => {
     <div>
         <div className="profil-page">
           <div className="log-container">
-            <Log></Log>
+            <Log signin={false} signup={true}>
+              
+            </Log>
             <div className="img-container">
               <img src="./img/log.svg" alt="img-log" />
             </div>
