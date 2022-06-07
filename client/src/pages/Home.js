@@ -1,5 +1,7 @@
+// J'importe React
 import React from 'react';
 
+// Mon composant Home
 const Home = () => {
   return (
     <div>
@@ -8,4 +10,5 @@ const Home = () => {
   );
 }
 
+// J'exporte mon composant
 export default Home;

@@ -1,5 +1,7 @@
+// J'importe React
 import React from 'react';
 
+// Mon composant Profil
 const Profil = () => {
   return (
     <div>
@@ -8,4 +10,5 @@ const Profil = () => {
   );
 }
 
+// J'exporte mon composant
 export default Profil;
