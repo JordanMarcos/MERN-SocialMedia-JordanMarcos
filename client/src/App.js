@@ -10,7 +10,7 @@ const App = () => {
       <Routes/>
     </div>
   );
-}
+};
 
 // J'exporte mon composant
 export default App;

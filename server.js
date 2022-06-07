@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/user.routes");
 const postRoutes = require("./routes/post.routes");
 
+
 // Je donne le chemin à dotenv pour accéder aux variables d'environements
 require("dotenv").config({ path: "./config/.env" });
 // Je prends db.js pour accéder à la BDD
