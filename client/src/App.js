@@ -20,13 +20,15 @@ const App = () => {
         url: `${process.env.REACT_APP_API_URL}jwtid`,
         // withCredentials: true
       })
-        .then((res) => {
+        .then((res) => 
+        {
+          console.log(res);
           setUid(res.data);
         })
         .catch((err) => console.log("No token"));
     };
     fetchToken();
-    // [uid] useeffect est lancé quand l'uid change
+  // [uid] useeffect est lancé quand l'uid change
   }, [uid]);
 
   return (
